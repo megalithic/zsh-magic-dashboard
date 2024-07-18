@@ -55,26 +55,26 @@ function _gitlog {
 }
 
 function _list_files_here {
-  if [[ ! -x "$(command -v exa)" ]]; then print "\033[1;33mMagic Dashboard: \`exa\` not installed.\033[0m" && return 1; fi
+  if [[ ! -x "$(command -v \eza)" ]]; then print "\033[1;33mMagic Dashboard: \`eza\` not installed.\033[0m" && return 1; fi
 
-  local exa_output
+  local eza_output
   local max_files_lines=${MAGIC_DASHBOARD_FILES_LINES:-6}
   # local use_hyperlinks
   # use_hyperlinks=$([[ "$MAGIC_DASHBOARD_USE_HYPERLINKS" != "0" ]] && echo "--hyperlink" || echo "")
-  exa_output=$(
-    exa --width="$COLUMNS" --all --grid --color=always --icons \
+  eza_output=$(
+    \eza --width="$COLUMNS" --all --grid --color=always --icons \
       --git-ignore --ignore-glob=".DS_Store|Icon?" \
       --sort=name --group-directories-first --no-quotes \
       --git --long --no-user --no-permissions --no-filesize --no-time
   )
   # $use_hyperlinks PENDING https://github.com/eza-community/eza/issues/693
 
-  if [[ $(echo "$exa_output" | wc -l) -gt $max_files_lines ]]; then
+  if [[ $(echo "$eza_output" | wc -l) -gt $max_files_lines ]]; then
     local shortened
-    shortened="$(echo "$exa_output" | head -n"$max_files_lines")"
+    shortened="$(echo "$eza_output" | head -n"$max_files_lines")"
     printf "%s \033[1;36m…\033[0m" "$shortened"
-  elif [[ -n "$exa_output" ]]; then
-    echo -n "$exa_output"
+  elif [[ -n "$eza_output" ]]; then
+    echo -n "$eza_output"
   fi
 }
 
@@ -148,7 +148,7 @@ function _magic_enter {
   [[ $LINES -gt $disabled_below_height ]] || return 0
 
   # shellcheck disable=2012
-  [[ "$(exa --git-ignore | wc -l)" -gt 0 ]] && echo
+  [[ "$(\eza --git-ignore | wc -l)" -gt 0 ]] && echo
   _magic_dashboard
 }
 
